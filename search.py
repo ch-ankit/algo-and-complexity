@@ -1,6 +1,3 @@
-from turtle import right
-
-
 def linenar_search(values, target):
     n = len(values)
     for i in range(n):
