@@ -30,7 +30,6 @@ def linear_search_complexity():
     plt1.plot(randomList, bestCaseList, '*', label="Best Case")
     plt1.plot(randomList, worstCaseList, '.', label="Worst Case")
     plt1.legend()
-    # plt.savefig("Complexity_linear.png", format="png")
 
 
 def binary_search_complexity():
@@ -42,11 +41,13 @@ def binary_search_complexity():
         bestCaseStartTime = time.time()
         binary_search(range(num), (num-1)//2)
         bestCaseEndTime = time.time()
-        bestCaseList.append((bestCaseEndTime-bestCaseStartTime)*1000*1000)
+        bestCaseList.append((bestCaseEndTime-bestCaseStartTime)
+                            * 1000*1000)  # Append time in best case time in microseconds
         worstCaseStartTime = time.time()
         binary_search(range(num), num)
         worstCaseEndTime = time.time()
-        worstCaseList.append((worstCaseEndTime-worstCaseStartTime)*1000*1000)
+        worstCaseList.append((worstCaseEndTime-worstCaseStartTime)
+                             * 1000*1000)  # Append time in worst case time in microseconds
 
     plt2.set_title("Binary Search")
     plt2.set_xlabel("Array Size")
