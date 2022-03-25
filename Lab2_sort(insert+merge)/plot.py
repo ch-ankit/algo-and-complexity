@@ -43,7 +43,7 @@ def merge_sort_complexity():
         bestCaseStartTime = time.time_ns()
         merge_sort(list(range(num)),0, len(range(num))-1)
         bestCaseEndTime = time.time_ns()
-        bestCaseList.append((bestCaseEndTime-bestCaseStartTime))
+        bestCaseList.append((bestCaseEndTime-bestCaseStartTime)*1000*10000000)
     plt.figure("Merge Best Case")
     plt.title("Merge Sort(Best Case)")
     plt.xlabel("Array Size")
