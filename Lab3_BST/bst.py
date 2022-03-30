@@ -55,20 +55,24 @@ class BinarySearchTree:
         return (smallestNode.key,smallestNode.value)
      
     def _smallest(self, node:BSTNode):
-        temp=node
-        while temp.left!=None:
-            temp=temp.left
-        return temp
+        if node!=None:
+            temp=node
+            while temp.left!=None:
+                temp=temp.left
+            return temp
+        return
 
     def largest(self):
         largestNode=self._largest(self.root)
         return (largestNode.key,largestNode.value)
 
     def _largest(self,node:BSTNode):
-        temp=node
-        while temp.right!=None:
-            temp=temp.right
-        return temp
+        if node!=None:
+            temp=node
+            while temp.right!=None:
+                temp=temp.right
+            return temp
+        return
         
     def preorder_walk(self):
         walk=[]
@@ -109,39 +113,94 @@ class BinarySearchTree:
         if self._size==0:
             return
         else:
-            nodeToDelete=self.search_recursion(self.root,key)
-            if nodeToDelete:
-                #if node to delete has no child
-                if nodeToDelete.left==None and nodeToDelete.right==None:
-                    if nodeToDelete.key<nodeToDelete.parent.key:
-                        nodeToDelete.parent.left=None
-                        del nodeToDelete
-                        self._size=self._size-1
-                    else:
-                        nodeToDelete.parent.right=None
-                        del nodeToDelete
-                        self._size=self._size-1
-                #if node to delete has children
+            return self._remove(self.root,key)
+            # nodeToDelete=self.search_recursion(self.root,key)
+            # if nodeToDelete:
+            #     #if node to delete is root
+            #     if nodeToDelete.key==self.root.key:
+            #         #if only right tree
+            #         if nodeToDelete.left==None:
+            #             self.root=nodeToDelete.right
+            #             del nodeToDelete
+            #             self._size=self._size-1
+            #         #if only left tree
+            #         elif nodeToDelete.right==None:
+            #             self.root=nodeToDelete.left
+            #             del nodeToDelete
+            #             self._size=self._size-1
+            #     else:
+            #         #if node to delete has no child
+            #         if nodeToDelete.left==None and nodeToDelete.right==None:
+            #             if nodeToDelete.key<nodeToDelete.parent.key:
+            #                 nodeToDelete.parent.left=None
+            #                 del nodeToDelete
+            #                 self._size=self._size-1
+            #             else:
+            #                 nodeToDelete.parent.right=None
+            #                 del nodeToDelete
+            #                 self._size=self._size-1
+            #         #if node to delete has children
+            #         else:
+            #             #making the left subtree's right most child as new root
+            #             nodeToReplaceDeletedNode=self._largest(nodeToDelete.left)
+            #             #if replacing node has no children
+            #             if nodeToReplaceDeletedNode.left==None and nodeToReplaceDeletedNode.right==None:
+            #                 nodeToReplaceDeletedNode.parent.left=None
+            #                 nodeToDelete.key=nodeToReplaceDeletedNode.key
+            #                 nodeToDelete.value=nodeToReplaceDeletedNode.value
+            #                 del nodeToReplaceDeletedNode
+            #                 self._size=self._size-1
+            #             #replacing node has left children
+            #             else:
+            #                 nodeToReplaceDeletedNode.parent.left=nodeToReplaceDeletedNode.left
+            #                 nodeToDelete.key=nodeToReplaceDeletedNode.key
+            #                 nodeToDelete.value=nodeToReplaceDeletedNode.value
+            #                 del nodeToReplaceDeletedNode
+            #                 self._size=self._size-1 
+            #                 return
+            # else:
+            #     return
+    def _remove(self,root:BSTNode,key):
+        nodeToDelete= self.search_recursion(root,key)
+        if nodeToDelete is False:
+            return
+        #case 1: node to be deleted has no children
+        if nodeToDelete.left is None and nodeToDelete.right is None:
+            if nodeToDelete!=self.root:
+                if nodeToDelete.parent.left==nodeToDelete:
+                    nodeToDelete.parent.left=None
+                    self._size=self._size-1
                 else:
-                    #making the left subtree's right most child as new root
-                    nodeToReplaceDeletedNode=self._largest(nodeToDelete.left)
-                    #if replacing node has no children
-                    if nodeToReplaceDeletedNode.left==None and nodeToReplaceDeletedNode.right==None:
-                        nodeToReplaceDeletedNode.parent.left=None
-                        nodeToDelete.key=nodeToReplaceDeletedNode.key
-                        nodeToDelete.value=nodeToReplaceDeletedNode.value
-                        del nodeToReplaceDeletedNode
-                        self._size=self._size-1
-                    #replacing node has left children
-                    else:
-                        nodeToReplaceDeletedNode.parent.left=nodeToReplaceDeletedNode.left
-                        nodeToDelete.key=nodeToReplaceDeletedNode.key
-                        nodeToDelete.value=nodeToReplaceDeletedNode.value
-                        del nodeToReplaceDeletedNode
-                        self._size=self._size-1 
-                        return
+                    nodeToDelete.parent.right=None
+                    self._size=self._size-1
             else:
-                return
+                self.root=None
+                self._size=self._size-1
+        #case 2 node to delete has 2 childre
+        elif nodeToDelete.left and nodeToDelete.right:
+            successorNode=self._largest(nodeToDelete.left)
+            key=successorNode.key
+            value=successorNode.value
+            self._remove(self.root,successorNode.key)
+            nodeToDelete.key=key
+            nodeToDelete.value=value
+        #case 3 only one child node to delete
+        else:
+            if nodeToDelete.left:
+                child=nodeToDelete.left
+            else:
+                child=nodeToDelete.right
+            if nodeToDelete!=self.root:
+                if nodeToDelete==nodeToDelete.parent.left:
+                    nodeToDelete.parent.left=child
+                    self._size=self._size-1
+                else:
+                    nodeToDelete.parent.right=child
+                    self._size=self._size-1
+            else:
+                self.root=child
+                self._size=self._size-1
+        return
 
     def size(self):
         return self._size
