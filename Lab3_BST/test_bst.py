@@ -47,9 +47,9 @@ class BSTTestCase(unittest.TestCase):
         tests for inorder_walk
         """
         actual_output = self.bst.inorder_walk()
-        expected_output = [1, 5, 8, 10, 30, 40, 45, 52]
+        output = [1, 5, 8, 10, 30, 40, 45, 52]
 
-        self.assertListEqual(actual_output, expected_output)
+        self.assertListEqual(actual_output, output)
 
         # Add one node
         self.bst.add(25, "Value for 25")
@@ -61,9 +61,9 @@ class BSTTestCase(unittest.TestCase):
         tests for postorder_walk
         """
         actual_output = self.bst.postorder_walk()
-        expected_output = [1, 8, 5, 30, 45, 40, 52, 10]
+        output = [1, 8, 5, 30, 45, 40, 52, 10]
         
-        self.assertListEqual(actual_output, expected_output)
+        self.assertListEqual(actual_output, output)
 
         # Add one node
         self.bst.add(25, "Value for 25")
@@ -86,8 +86,8 @@ class BSTTestCase(unittest.TestCase):
         tests for search
         """
         actual_output = self.bst.search(40)
-        expected_output = "Value for 40"
-        self.assertEqual(actual_output, expected_output)
+        output = "Value for 40"
+        self.assertEqual(actual_output, output)
     
         self.assertFalse(self.bst.search(90))
 
@@ -121,7 +121,7 @@ class BSTTestCase(unittest.TestCase):
 
     def test_largest(self):
         """
-        tests for largest
+        tests for largest.
         """
         self.assertTupleEqual(self.bst.largest(), (52, "Value for 52"))
 
@@ -133,6 +133,69 @@ class BSTTestCase(unittest.TestCase):
 
         # Now the largest key is 54
         self.assertTupleEqual(self.bst.largest(), (54, "Value for 54"))
+
+    #additional test cases
+    def test_search_further_cases(self):
+        """Additional tests for search function."""
+
+        self.assertEqual(self.bst.search(1), "Value for 1")
+        self.assertEqual(self.bst.search(52), "Value for 52")
+        self.assertEqual(self.bst.search(30), "Value for 30")
+
+        self.bst.add(20, "Value for 20")
+        self.assertEqual(self.bst.search(20), "Value for 20")
+
+    def test_add_further_cases(self):
+        """Additional tests for add function."""
+
+        output = [1, 5, 8, 10, 30, 40, 45, 52]
+        self.assertListEqual(self.bst.inorder_walk(), output)
+
+        self.bst.add(20, "Value for 20")
+        output = [1, 5, 8, 10, 20, 30, 40, 45, 52]
+        self.assertEqual(self.bst.size(), 9)
+        self.assertListEqual(self.bst.inorder_walk(), output)
+
+        self.bst.add(7, "Value for 7")
+        output = [1, 5, 7, 8, 10, 20, 30, 40, 45, 52]
+        self.assertEqual(self.bst.size(), 10)
+        self.assertListEqual(self.bst.inorder_walk(), output)
+
+        self.bst.add(55, "Value for 55")
+        output = [1, 5, 7, 8, 10, 20, 30, 40, 45, 52, 55]
+        self.assertEqual(self.bst.size(), 11)
+        self.assertListEqual(self.bst.inorder_walk(), output)
+
+        self.assertTupleEqual(self.bst.smallest(), (1, "Value for 1"))
+        self.assertTupleEqual(self.bst.largest(), (55, "Value for 55"))
+
+    def test_remove_further_cases(self):
+        """Additional tests for remove function."""
+
+        output = [1, 5, 8, 10, 30, 40, 45, 52]
+        self.assertListEqual(self.bst.inorder_walk(), output)
+
+        self.bst.remove(8)
+        output = [1, 5, 10, 30, 40, 45, 52]
+        self.assertListEqual(self.bst.inorder_walk(), output)
+
+        self.bst.remove(30)
+        self.bst.remove(1)
+        output = [5, 10, 40, 45, 52]
+        self.assertListEqual(self.bst.inorder_walk(), output)
+
+        value = self.bst.remove(1)
+        self.assertEqual(value, False)
+        output = [5, 10, 40, 45, 52]
+        self.assertListEqual(self.bst.inorder_walk(), output)
+
+        value = self.bst.remove(40)
+        self.assertEqual(value, None)
+        output = [5, 10, 45, 52]
+        self.assertListEqual(self.bst.inorder_walk(), output)
+
+        self.assertTupleEqual(self.bst.smallest(), (5, "Value for 5"))
+        self.assertTupleEqual(self.bst.largest(), (52, "Value for 52"))
 
 if __name__ == "__main__":
     unittest.main()    
